@@ -8,12 +8,24 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (
             # admin에서 section을 나눌 수 있음
-            "Profile", {
-                "fields": ('username', 'email', 'password', 'name', 'is_host'),
+            "Profile",
+            {
+                "fields": (
+                    "avatar",
+                    "username",
+                    "password",
+                    "name",
+                    "email",
+                    "is_host",
+                    "gender",
+                    "language",
+                    "currency",
+                ),
             },
         ),
         (
-            "Permissions", {
+            "Permissions",
+            {
                 "fields": (
                     "is_active",
                     "is_staff",
@@ -21,23 +33,28 @@ class CustomUserAdmin(UserAdmin):
                     "groups",
                     "user_permissions",
                 ),
-            }
+                "classes": ("collapse",),
+            },
         ),
         (
-            "Important dates", {
+            "Important dates",
+            {
                 "fields": (
                     "last_login",
                     "date_joined",
                 ),
-                "classes": (
-                    "collapse",
-                ),
+                "classes": ("collapse",),
             },
         ),
     )
     list_display = (
+        "id",
         "username",
         "email",
         "name",
         "is_host",
+    )
+    list_display_links = (
+        "id",
+        "username",
     )
