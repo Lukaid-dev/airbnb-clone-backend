@@ -12,6 +12,9 @@ class Room(CommonModel):
         PRIVATE = ("private", "Private Room")
         SHARED = ("shared", "Shared Room")
 
+    name = models.CharField(
+        max_length=180,
+    )
     country = models.CharField(
         max_length=50,
         default="Korea",
@@ -44,16 +47,24 @@ class Room(CommonModel):
         blank=True,
     )
 
-    class Amenity(CommonModel):
-        """Amenity Model Definition"""
+    def __str__(self):
+        return self.name
 
-        name = models.CharField(
-            max_length=150,
-        )
-        description = models.CharField(
-            max_length=150,
-            null=True,
-        )
 
-        def __str__(self):
-            return self.name
+class Amenity(CommonModel):
+    """Amenity Model Definition"""
+
+    class Meta:
+        verbose_name_plural = "Amenities"
+
+    name = models.CharField(
+        max_length=150,
+    )
+    description = models.CharField(
+        max_length=150,
+        null=True,  # db side
+        blank=True,  # django side
+    )
+
+    def __str__(self):
+        return self.name
