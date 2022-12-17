@@ -4,6 +4,9 @@ from common.models import CommonModel
 
 
 class WishList(CommonModel):
+    class Meta:
+        default_related_name = "wishlists"
+
     """WishList Model Definition"""
 
     name = models.CharField(

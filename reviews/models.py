@@ -4,6 +4,9 @@ from common.models import CommonModel
 
 
 class Review(CommonModel):
+    class Meta:
+        default_related_name = "reviews"
+
     """Review from a user to a room or a experience"""
 
     user = models.ForeignKey(

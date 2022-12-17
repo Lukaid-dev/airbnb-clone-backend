@@ -3,6 +3,9 @@ from common.models import CommonModel
 
 
 class ChanttingRoom(CommonModel):
+    class Meta:
+        default_related_name = "chantting_rooms"
+
     """
     - Room Model Definition
     - 모델의 이름이 같다는건 문제가 되지 않음
@@ -19,6 +22,9 @@ class ChanttingRoom(CommonModel):
 
 
 class Message(CommonModel):
+    class Meta:
+        default_related_name = "messages"
+
     """Message Model Definition"""
 
     text = models.TextField()

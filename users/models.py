@@ -7,6 +7,9 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    class Meta:
+        default_related_name = "users"
+
     class GenderChoices(models.TextChoices):
         MALE = ("male", "Male")  # (value for db, label for admin)
         FEMALE = ("female", "Female")

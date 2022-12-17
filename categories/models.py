@@ -4,10 +4,11 @@ from common.models import CommonModel
 
 
 class Category(CommonModel):
-    """Room or Experience Category"""
-
     class Meta:
         verbose_name_plural = "Categories"
+        default_related_name = "categories"
+
+    """Room or Experience Category"""
 
     class CategoryKindChoices(models.TextChoices):
         ROOMS = ("rooms", "Rooms")

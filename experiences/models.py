@@ -4,6 +4,9 @@ from common.models import CommonModel
 
 
 class Experience(CommonModel):
+    class Meta:
+        default_related_name = "experiences"
+
     """Experience Model Definition"""
 
     name = models.CharField(
@@ -42,6 +45,9 @@ class Experience(CommonModel):
 
 
 class Perk(CommonModel):
+    class Meta:
+        default_related_name = "perks"
+
     """What is included in the experience"""
 
     name = models.CharField(

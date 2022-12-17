@@ -7,6 +7,9 @@ class Room(CommonModel):
 
     """Room Model Definition"""
 
+    class Meta:
+        default_related_name = "rooms"
+
     class RoomKindChoices(models.TextChoices):
         ENTIRE = ("entire", "Entire Place")
         PRIVATE = ("private", "Private Room")
@@ -43,7 +46,6 @@ class Room(CommonModel):
     )
     amenities = models.ManyToManyField(
         "rooms.Amenity",
-        related_name="rooms",
         blank=True,
     )
     categore = models.ForeignKey(
@@ -55,6 +57,17 @@ class Room(CommonModel):
 
     def __str__(self):
         return self.name
+
+    def rating(self):
+        count = self.reviews.count()
+        if count == 0:
+            return "no reviews yet"
+        else:
+            total_rating = 0
+            # 전체 리뷰 중 레이팅만 들고오게 하려면?
+            for rating in self.reviews.all().values("rating"):
+                total_rating += rating.get("rating")
+        return round(total_rating / count, 2)
 
     # def total_amenities(self):
     #     print("test")

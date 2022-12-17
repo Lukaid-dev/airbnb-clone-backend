@@ -4,6 +4,9 @@ from common.models import CommonModel
 
 
 class Booking(CommonModel):
+    class Meta:
+        default_related_name = "bookings"
+
     """Booking Model Definition"""
 
     # 아무리 생각해도 이렇게 app을 쪼개는게 굳이 필요한가 싶다.

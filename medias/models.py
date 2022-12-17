@@ -3,6 +3,9 @@ from common.models import CommonModel
 
 
 class Photo(CommonModel):
+    class Meta:
+        default_related_name = "photos"
+
     """Photo Model Definition"""
 
     file = models.ImageField()
@@ -32,6 +35,9 @@ class Photo(CommonModel):
 
 
 class Video(CommonModel):
+    class Meta:
+        default_related_name = "videos"
+
     """Video Model Definition"""
 
     file = models.FileField()
