@@ -5,8 +5,11 @@ from .models import Category
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = "__all__"
-        # or fields = ("pk", "name", "kind", "created_at")
+        # fields = "__all__"
+        fields = (
+            "name",
+            "kind",
+        )
         # or exclude = ("created_at",)
 
     # pk = serializers.IntegerField(

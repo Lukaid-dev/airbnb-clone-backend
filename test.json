@@ -1,0 +1,44 @@
+{
+    "id": 1,
+    "owner": {
+        "name": "성우",
+        "avatar": null,
+        "username": "lukaid"
+    },
+    "amenities": [
+        {
+            "name": "test",
+            "description": "test"
+        }
+    ],
+    "category": {
+        "name": "magical DRF TEST",
+        "kind": "experiences"
+    },
+    "created_at": "2022-12-13T04:25:02.297975Z",
+    "updated_at": "2023-01-20T16:12:37.818164Z",
+    "name": "Beautiful House in Seoul",
+    "country": "Korea",
+    "city": "Seoul",
+    "price": 0,
+    "rooms": 1,
+    "toilets": 1,
+    "description": "test",
+    "address": "test",
+    "pet_friednly": true,
+    "kind": "entire"
+}
+
+
+{
+    "name": "testtesttest",
+    "country": "Korea",
+    "city": "Seoul",
+    "price": 10,
+    "rooms": 1,
+    "toilets": 1,
+    "description": "test",
+    "address": "test",
+    "pet_friednly": true,
+    "kind": "entire"
+}
