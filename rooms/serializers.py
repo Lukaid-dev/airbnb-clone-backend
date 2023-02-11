@@ -28,6 +28,7 @@ class RoomListSerializer(ModelSerializer):
 
 class RoomDetailSerializer(ModelSerializer):
 
+    # relationships
     # 원하는 필드에 원하는 시리얼라이저 적용 가능
     # owner는 request.data에서 받으면 안됨!
     owner = TinyUserSerializer(read_only=True)
