@@ -40,5 +40,10 @@
     "description": "test",
     "address": "test",
     "pet_friednly": true,
-    "kind": "entire"
+    "kind": "entire",
+    "category": 4,
+    "amenities": [
+        3,
+        2
+    ]
 }

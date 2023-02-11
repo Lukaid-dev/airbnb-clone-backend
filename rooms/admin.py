@@ -74,9 +74,14 @@ class AmenityAdmin(admin.ModelAdmin):
     """Amenity Admin Definition"""
 
     list_display = (
+        "id",
         "name",
         "description",
         "created_at",
+    )
+    list_display_links = (
+        "id",
+        "name",
     )
     list_filter = (
         "created_at",
@@ -86,3 +91,5 @@ class AmenityAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
+
+
