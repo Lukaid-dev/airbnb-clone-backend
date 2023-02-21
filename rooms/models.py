@@ -61,7 +61,7 @@ class Room(CommonModel):
     def rating(self):
         count = self.reviews.count()
         if count == 0:
-            return "no reviews yet"
+            return 0
         else:
             total_rating = 0
             # 전체 리뷰 중 레이팅만 들고오게 하려면?
