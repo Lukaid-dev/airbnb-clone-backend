@@ -7,6 +7,10 @@ from categories.serializers import CategorySerializer
 
 from reviews.serializers import ReviewSerializer
 
+from medias.serializers import PhotoSerializer
+
+from wishlists.models import Wishlist
+
 
 class AmenitySerializer(ModelSerializer):
     class Meta:
@@ -20,6 +24,7 @@ class AmenitySerializer(ModelSerializer):
 class RoomListSerializer(ModelSerializer):
     rating = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
+    photos = PhotoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Room
@@ -31,6 +36,7 @@ class RoomListSerializer(ModelSerializer):
             "price",
             "rating",
             "is_owner",
+            "photos",
         )
 
     def get_rating(self, obj):
@@ -51,7 +57,9 @@ class RoomDetailSerializer(ModelSerializer):
     # serializer에서 method field를 사용하여 원하는 정보를 보여줄 수 있음
     rating = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
     # reviews = ReviewSerializer(many=True, read_only=True)
+    photos = PhotoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Room
@@ -70,6 +78,13 @@ class RoomDetailSerializer(ModelSerializer):
     # practice for context
     def get_is_owner(self, obj):
         return obj.owner == self.context.get("request").user
+
+    def get_is_liked(self, obj):
+        request = self.context.get("request")
+        return Wishlist.objects.filter(
+            user=request.user,
+            rooms__id=obj.pk,
+        ).exists()
 
     # view에서 serializer.save가 불리면 create method가 호출 됨
 

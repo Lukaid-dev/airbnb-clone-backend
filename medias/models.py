@@ -8,7 +8,8 @@ class Photo(CommonModel):
 
     """Photo Model Definition"""
 
-    file = models.ImageField()
+    # file = models.ImageField()
+    file = models.URLField()  # for security
     description = models.TextField(
         max_length=140,
     )
@@ -40,7 +41,8 @@ class Video(CommonModel):
 
     """Video Model Definition"""
 
-    file = models.FileField()
+    # file = models.FileField()
+    file = models.URLField()  # for security
     experience = models.OneToOneField(
         "experiences.Experience",
         on_delete=models.CASCADE,

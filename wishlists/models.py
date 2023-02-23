@@ -3,11 +3,11 @@ from django.db import models
 from common.models import CommonModel
 
 
-class WishList(CommonModel):
+class Wishlist(CommonModel):
     class Meta:
         default_related_name = "wishlists"
 
-    """WishList Model Definition"""
+    """wishlist Model Definition"""
 
     name = models.CharField(
         max_length=150,
