@@ -11,16 +11,22 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-wp)pl556dwmmy1+jql=l4uzylvfqvt8#vd^e2=+@38wo**)ev_"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,6 +51,7 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "rest_framework.authtoken",  # and migrate
 ]
 
 SYSTEM_APPS = [
@@ -151,3 +158,15 @@ MEDIA_URL = "user-uploads/"
 
 # constants
 PAGE_SIZE = 3
+
+# drf의 기본 설정 변경
+REST_FRAMEWORK = {
+    # django가 user를 찾는 방법
+    # APIView를 상속받은 클래스에서 request.user를 사용할 수 있게 해줌, APIView이전에 동작
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",  # this is default
+        "config.authentication.TrustMeBroAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "config.authentication.JWTAuthentication",
+    ]
+}

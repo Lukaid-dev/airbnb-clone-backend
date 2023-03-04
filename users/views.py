@@ -1,4 +1,7 @@
+import jwt
+
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -86,7 +89,11 @@ class LogIn(APIView):
         password = request.data.get("password")
         if not username or not password:
             raise ParseError("username and password are required")
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
         if user is not None:
             login(request, user)
             # serializer = serializers.PrivateUserSerializer(user)
@@ -103,3 +110,30 @@ class LogOut(APIView):
     def post(self, request):
         logout(request)
         return Response({"message": "Log out success"})
+
+
+class JWTLogin(APIView):
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        if not username or not password:
+            raise ParseError("username and password are required")
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+
+        if user is not None:
+            # token은 유저에게 전달되기 떄문에 민감한 정보를 담으면 안됨
+            # 유저가 원하면 복호화 가능
+            token = jwt.encode(
+                {
+                    "pk": user.pk,
+                },
+                settings.SECRET_KEY,
+                algorithm="HS256",
+            )
+            return Response({"token": token})
+        else:
+            raise ParseError("username or password is wrong")
