@@ -1,22 +1,30 @@
-from django.conf import settings
+# django import convention
 
+# from django
 from django.db import transaction
+from django.conf import settings
+from django.utils import timezone
+
+# from third party like rest_framework
 
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied, ParseError
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
+# from same app
 
 from .models import Amenity, Room
-from categories.models import Category
-
 from .serializers import AmenitySerializer, RoomDetailSerializer, RoomListSerializer
 
+# from other apps
+
+from categories.models import Category
 from reviews.serializers import ReviewSerializer
-
 from medias.serializers import PhotoSerializer
-
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from bookings.models import Booking
+from bookings.serializers import PublicBookingSerializer, CreateBookingSerializer
 
 
 class Amenities(APIView):
@@ -286,3 +294,44 @@ class RoomPhotos(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=400)
+
+
+class RoomBookings(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    # IsAuthenticatedOrReadOnly means that all user can read (get) but only authenticated user can write (post, put, delete)
+
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        room = self.get_object(pk)
+        now = timezone.now().astimezone().date()
+        # now = timezone.localtime(timezone.now()).date()
+        print(now)
+        Bookings = Booking.objects.filter(
+            room=room,
+            kind=Booking.BookingKindChoices.ROOM,
+            check_in__gt=now,
+        )
+        serializer = PublicBookingSerializer(Bookings, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        room = self.get_object(pk)
+        # model에선 guest만 required이기 떄문에 client에서 guest만 보내도 valid하다고 나옴
+        # 근데 상황에 따라 valid조건이 달라지기 때문에 serializer에서 validate를 통해 조건을 추가해줘야함
+        serializer = CreateBookingSerializer(data=request.data, context={"room": room})
+
+        if serializer.is_valid():
+            booking = serializer.save(
+                user=request.user,
+                room=room,
+                kind=Booking.BookingKindChoices.ROOM,
+            )
+            serializer = PublicBookingSerializer(booking)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
