@@ -33,7 +33,7 @@ class User(AbstractUser):
         blank=True,
         editable=False,
     )
-    avatar = models.ImageField(
+    avatar = models.URLField(
         blank=True,
     )
     name = models.CharField(

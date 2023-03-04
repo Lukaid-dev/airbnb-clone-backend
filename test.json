@@ -67,3 +67,33 @@
     "check_out": "2023-03-13",
     "guests": 3
 }
+
+
+{
+    "is_superuser": true,
+    "username": "lukaid",
+    "email": "crescent3859@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2022-12-12T21:13:58+09:00",
+    "first_name": "",
+    "last_name": "",
+    "avatar": null,
+    "name": "성우",
+    "is_host": false,
+    "gender": "male",
+    "language": "ko",
+    "currency": "KRW",
+    "groups": [],
+    "user_permissions": []
+}
+
+{
+    "username": "lukaid2",
+    "email": "crescent3859@gmail.com",
+    "name": "성우2",
+    "gender": "male",
+    "language": "ko",
+    "currency": "KRW",
+    "password": "1234"
+}
