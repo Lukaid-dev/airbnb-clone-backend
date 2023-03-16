@@ -79,10 +79,12 @@ class RoomDetailSerializer(ModelSerializer):
 
     def get_is_liked(self, obj):
         request = self.context.get("request")
-        return Wishlist.objects.filter(
-            user=request.user,
-            rooms__id=obj.pk,
-        ).exists()
+        if request.user.is_authenticated:
+            return Wishlist.objects.filter(
+                user=request.user,
+                rooms__id=obj.pk,
+            ).exists()
+        return False
 
     # view에서 serializer.save가 불리면 create method가 호출 됨
 
