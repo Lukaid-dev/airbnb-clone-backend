@@ -15,4 +15,6 @@ urlpatterns = [
     # login jwt
     path("jwt-login/", views.JWTLogin.as_view()),
     path("@<str:username>/", views.PublicUser.as_view()),
+    # social login
+    path("github/", views.GithubLogin.as_view()),
 ]

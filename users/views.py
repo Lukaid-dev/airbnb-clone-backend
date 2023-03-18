@@ -1,4 +1,6 @@
+from random import random
 import jwt
+import requests
 
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
@@ -137,3 +139,67 @@ class JWTLogin(APIView):
             return Response({"token": token})
         else:
             raise ParseError("username or password is wrong")
+
+
+class GithubLogin(APIView):
+    def post(self, request):
+        try:
+            code = request.data.get("code")
+            access_token = requests.post(
+                "https://github.com/login/oauth/access_token",
+                data={
+                    "client_id": settings.GITHUB_CLIENT_ID,
+                    "client_secret": settings.GITHUB_CLIENT_SECRET,
+                    "code": code,
+                },
+                headers={
+                    "Accept": "application/json",
+                },
+            )
+            access_token = access_token.json().get("access_token")
+            user_data = requests.get(
+                "https://api.github.com/user",
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {access_token}",
+                },
+            )
+            user_data = user_data.json()
+            user_emails = requests.get(
+                "https://api.github.com/user/emails",
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {access_token}",
+                },
+            )
+            user_emails = user_emails.json()
+            for email in user_emails:
+                if email.get("primary") and email.get("verified"):
+                    primary_email = email.get("email")
+                    break
+            try:
+                user = User.objects.get(email=primary_email)
+                login(request, user)
+                return Response(status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                print("except")
+                # 중복 이름이나 이메일 예외처리 하셈
+                # if User.objects.get(username=user_data.get("login")):
+                #     print("if")
+                #     while True:
+                #         user_data["login"] = f"{user_data.get('login')}{random.randint(1, 1000)}"
+                #         if not User.objects.get(username=user_data.get("login")):
+                #             break
+                user = User.objects.create(
+                    username=user_data.get("login"),
+                    email=primary_email,
+                    name=user_data.get("name"),
+                    avatar=user_data.get("avatar_url"),
+                )
+                user.set_unusable_password()  # 이 유저는 비밀번호를 사용하지 않음 only login with github
+                # user.has_usable_password() 로 확인 가능
+                user.save()
+                login(request, user)
+                return Response(status=status.HTTP_200_OK)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
